@@ -4,6 +4,7 @@ The People Web App is the online digital edition of the magazine, which  utilize
 the Adobe Digital Publishing Suite (DPS) Web Viewer Embedding Library (also called the Adobe API), and includes a library page, displaying all issues a user is entitled to, and content viewer page, displaying the issue content within an iframe hosted on Adobe's server. As the digital edition is for subscribers only, the web app requires authentication which is done through People.com's Premium single sign on.
 
 DEMO
+
 *To access the People Web App you must have People Magazine subscriber digital credentials*
 
 1.  Go to www.people.com
