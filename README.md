@@ -5,9 +5,13 @@ the Adobe Digital Publishing Suite (DPS) Web Viewer Embedding Library (also call
 
 DEMO
 *To access the People Web App you must have People Magazine subscriber digital credentials*
+
 1.  Go to www.people.com
+
 2.  Click Sign In in top right corner
+
 3.  Enter credentials
+ 
 4.  Click Magazine or go here directly: http://www.people.com/people/digitalmagazine/index.hml
 
 About the Web App
