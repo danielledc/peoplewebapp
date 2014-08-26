@@ -17,7 +17,7 @@ DEMO
 
 About the Web App
 
-My role on this project was as lead developer, developing the html, javascript, and css for both the library and content viewer page, with an additional zoom functionality code contributed by another developer on my team. 
+My role on this project was as lead developer, developing the html, javascript, and css for both the library and content viewer page, with some code contributed by other developers on my team. All code contributed by other developers on team are noted in the source.
 
 Relevant files
 
