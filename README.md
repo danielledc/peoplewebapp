@@ -13,13 +13,13 @@ DEMO
 
 3.  Enter credentials
  
-4.  Click Magazine or go here directly: http://www.people.com/people/digitalmagazine/index.hml
+4.  Click Magazine or go here directly: http://www.people.com/people/static/digitalmagazine/index.hml
 
 About the Web App
 
 My role on this project was as lead developer, developing the html, javascript, and css for both the library and content viewer page, with some code contributed by other developers on my team. All code contributed by other developers on team are noted in the source.
 
-Relevant files
+RELEVANT FILES
 
 index.html - library page
 
@@ -51,6 +51,7 @@ Deep Link Cookie
 If a user tries to access a deep link, and the user is not logged in, the URL is stored in a cookie, named TCM_PE_WebAppDeepLink. This cookie expires at the end of the session.
 
 Content Page
+
 The content page is the page that displays the magazine content within an iframe, and must have a query string appended, representing the article URL. High level step by step description of the functionality is as follows:
 
 1. Make an ajax call to php file (https://auth.people.com/getTicket.php) which returns auth token in JSON format. If there is no auth token (meaning a status "401" or "503" is returned), STOP and redirect to subscription form, otherwise go to step 2
