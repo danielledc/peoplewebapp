@@ -285,10 +285,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 			};           
             //Adobe's event call back handler, used to add code to handle specific events 
             var eventCallbackHandler = function(message) {
-            	//console.log("eventCallbackHandler");
-                //console.log("Message", message);
-         
-                var popupDiv;
+            	var popupDiv;
 				//if the paywall event is returned, set foundPaywall to true
                 if (message.eventType === "orientationChange" || message.eventType === "paywall") {
 				    console.log(message.eventType);
@@ -523,7 +520,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 				}
 			};
        });
-
+        //get ad tracking params (ad parameters are in the query string if the user clicks on a deep link in an ad unit)
 		function getTrackingParams(paramName){
 				var searchString = window.location.search.substring(1);
 				if(typeof searchString == "undefined" || searchString == ""){return false;}
@@ -536,7 +533,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 				}
 				return false;
 		}
-
+        //logout of web app
 		function removeEntitlement(){
 				//logout of Adobe
 				var authenticator = adobeDPS.authenticationService.createAuthenticator(accountID, 'timecustomerservice');
@@ -650,7 +647,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 					}
 				}
 			}
-		}
+		}//end code contributed by another developer
 		
     </script>
  <div id='preloader' style='text-align:center'>
