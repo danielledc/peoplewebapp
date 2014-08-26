@@ -41,9 +41,13 @@ The library page is the page displaying all issues a user is entitled to read. A
 
 Deep Links
 
-A deep link is a URL that links to specific content in the web reader page. Deep links have the structure (using People as an example):
+A deep link is a URL that links to specific content in the web reader page. Deep links have the structure:
 
-http://www.people.com/people/static/digitalmagazine/index.html?/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.10282013/278203.html
+http://www.people.com/people/static/digitalmagazine/index.html?/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/321209.html
+
+or the longer version:
+
+http://www.people.com/people/static/digitalmagazine/content.html?articleUrl=/s/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/315015.html#s/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/321209.html
 
 Deep Link Cookie
 
@@ -63,3 +67,4 @@ Paywall event: This event is returned on the content page, if a user is not logg
  
 Navigation event: When the navigation event is returned, change the URL hash to the article path, especially to allow bookmarking and storage of the URL in a cookie
  
+Orientation change: This event returns the orientation of the content, either portrait or landscape.  When this event is returned, the layout around the iframe is adjusted accordingly 
