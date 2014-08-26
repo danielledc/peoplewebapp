@@ -90,6 +90,7 @@ function tcmOmniTrack(oStr) {
 
 	</script>
 </div>	
+   <!--start web app code-->
 	<script type="text/javascript" src="http://cdn-contentviewer.adobe.com/public/pepper/wvel/2/WVEmbed.min.js"></script>
 	
 
@@ -99,6 +100,7 @@ function tcmOmniTrack(oStr) {
 	    browserObj = new Object();
         var adTrackingParams=['fpa_adid', 'fpa_crid', 'fpa_ch', 'fpa_subch', 'fpa_dartPosition', 'fpa_dartType', 'fpa_siteName'];
 		
+		//function to get parameters in query string
 		function getTrackingParams(paramName){
 				var searchString = window.location.search.substring(1);
 				if(typeof searchString == "undefined" || searchString == ""){return false;}
@@ -111,6 +113,7 @@ function tcmOmniTrack(oStr) {
 				}
 				return false;
 		}
+		//if in test environment use qa URLs and qa account, otherwise use production account
 		if(/preview\.people\.com/.test(location.hostname)){
 			accountID = "24cf6a8ef4954cb3b002aa41e607adc7";
 			environment='qa';
@@ -159,7 +162,7 @@ function tcmOmniTrack(oStr) {
 		}
 			        
 	    
-	    // Shim for IE9 to allow console.log
+	    // Shim for IE9 to allow console.log *contributed by other developer*
 	    if (!window.console) {
 	    	(function() {
 		        var __console, Console;
@@ -197,7 +200,7 @@ function tcmOmniTrack(oStr) {
 				
 		   //if a deep link, redirect to content viewer page
 				if(getParams()){
-					//$("#topBox").hide();
+				    //if tablet or mobile device redirect
 					if(/iPad/.test(navigator.userAgent)||/NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)||/Android/.test(navigator.userAgent) ||/Silk/.test(navigator.userAgent)) {
 						$(".wrapLayer").hide();
 						if(/iPad/.test(navigator.userAgent)) {
@@ -223,20 +226,16 @@ function tcmOmniTrack(oStr) {
 				else{
 				
 			  	if ($.support.ajax) { // Check if XHR is supported (cannot continue if it is not)
-	        		//console.log("XHR supported. Continue...");
-					
 	        		$.ajax({
 			            type: "GET",
 			            url: mainLinks.token,
 			            dataType: "jsonp",
 			            success: function(data, responseText){
-						  //  console.log("Request to " + mainLinks.token + ": " + responseText);
-			                
+						    
 			                if (data.result) {
-				                //console.log("Status: " + data.status);
-								if (data.status == "401" || data.status == "503") {
+				            	if (data.status == "401" || data.status == "503") {
 									
-				                	//No token - Redirect to login page
+				                	//if mobile or tablet don't redirect otherwise redirect to login page (subscription page)
 									if(/iPad/.test(navigator.userAgent)||/NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)||/Android/.test(navigator.userAgent) ||/Silk/.test(navigator.userAgent)) {
 									}
 									else{
@@ -257,27 +256,22 @@ function tcmOmniTrack(oStr) {
 									
 									//set the entitlement ticket to the LUCIE auth token	
 									authToken=data['result'].ticket;
-										//console.log('Authtoken from LUCIE'+authToken);
 									adobeDPS.authenticationService.setEntitlementTicket(authToken);
 																	
 									//if deep link cookie exists, then redirect to content viewer page
 									if(getCookie(deepLinkCookieName)!=null){
-										//$("#topBox").hide();
 										deepLinkFromCookie(getCookie(deepLinkCookieName));
-										//console.log('got the cookie');
 									}
 									//otherwise get LUCIE entitlements
 									else{
-										//$("#allIssues").show();
 											getUserEntitlements();	
 									}	
 									
 								}
 							}
 							else {
-							    //Other error - redirect to login page
-			                	//console.log("Status: " + data.status + "; Error: " + data.error);
-								if(/iPad/.test(navigator.userAgent)||/NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)||/Android/.test(navigator.userAgent) ||/Silk/.test(navigator.userAgent)) {
+							    //Other error - if not tablet or mobile device redirect to login page
+			                	if(/iPad/.test(navigator.userAgent)||/NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)||/Android/.test(navigator.userAgent) ||/Silk/.test(navigator.userAgent)) {
 								}
 								else{
 									window.location.replace(mainLinks.signin);
@@ -285,7 +279,7 @@ function tcmOmniTrack(oStr) {
 								
 			                }
 			            },error: function(data, responseText){
-											console.log("Request: " + responseText);
+									console.log("Request: " + responseText);
 								}
 						});
 						
@@ -304,7 +298,6 @@ function tcmOmniTrack(oStr) {
 				issuesStartDate=Date.UTC(2012,07,20,0,0,0,0);
 				todayDate = Date.UTC(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), todayDate.getHours(), todayDate.getMinutes(), todayDate.getSeconds(), todayDate.getMilliseconds());
 				
-				//console.log("entitled", data);
 				for(var index in data) {
 					
 					productIdArray[index]=data[index].productId;
@@ -371,14 +364,15 @@ function tcmOmniTrack(oStr) {
 							}	
 				
 	            }
+				//hide loading gif once library built
 				$('#preloader').hide();
 				$('#container').show();
 				$("body").css("background", "#f7f7f7 url('http://img2.timeinc.net/people/static/i/nav/sprite-premium-top-nav-v3.png') 0 -440px repeat-x");
 								
 				$('div.gridItem').tsort({order:'desc', attr:'id'});
-				//if entitled to more than one issue
+				//if entitled to more than one issue 
 				if(entitledTitlesArray.length>1){
-				
+				    //if current subscriber display current week's issue larger
 					if(activeUser!="N"){
 						$("div.gridItem:first" ).css( "height", "607px" );
 						$("div.gridItem:first" ).css( "width", "440px" );
@@ -390,14 +384,16 @@ function tcmOmniTrack(oStr) {
 						$("div.gridItem:first a:last" ).css("margin-left","120px");
 						$("div.gridItem:first div.lib_box_txt" ).css("padding-left","120px");
 					}
+					//if not current subscriber display subscribe banner
 					else{
 						$("#expiredUserAdCall" ).show();
 						tcmOmniTrack('pe-wappexpired');
 						$("#yourIssues" ).show();
 					}
 				}
-				//if entitled to one issue
+				//if entitled to one issue 
 				else {
+					//if current subscriber display issue centered and large
 					if(activeUser!="N"){
 						$("div.gridItem:first" ).css( "height", "607px" );
 						$("div.gridItem:first" ).css( "width", "440px" );
@@ -411,6 +407,7 @@ function tcmOmniTrack(oStr) {
 						$("div.gridItem:first a:last" ).css("margin-left","120px");
 						$("div.gridItem:first div.lib_box_txt" ).css("padding-left","120px");
 					}
+					//else show subscriber banner ad
 					else{
 					    $("#expiredUserAdCall" ).show();
 						tcmOmniTrack('pe-wappexpired');
@@ -543,8 +540,7 @@ function tcmOmniTrack(oStr) {
 			                	
 								if (data.result) {
 								   //get entitlements
-									//console.log("Status: " + data.status);
-				            		entitledTitles=data.result.entitlements.productId.toString();
+									entitledTitles=data.result.entitlements.productId.toString();
 									entitledTitlesArray=entitledTitles.split(",");
 									$.each(entitledTitlesArray, function(i, el){
 										if($.inArray(el, uniqueEntitledTitlesArray) === -1) uniqueEntitledTitlesArray.push(el);
@@ -553,7 +549,6 @@ function tcmOmniTrack(oStr) {
 				                  // Entitlements Received, initialize
 									init();
 								} else {
-									//console.log("Status: " + data.status + "; Error: " + data.error);
 									if (data.status == "401" ||data.status == "500" ) {
 				                	//Lucie problem - refresh page for re-authentication request
 										getUserEntitlements();
@@ -562,7 +557,6 @@ function tcmOmniTrack(oStr) {
 								}
 								},
 			            error: function(data, responseText){
-			               // console.log("Request: " + responseText);
 			            }
 			        });
 		      
@@ -586,11 +580,13 @@ function tcmOmniTrack(oStr) {
 
   
 <div>
+<!--loading gif displays on load of page-->
  <div id='preloader' style='text-align:center'>
 					<br/>
 					<img src="images/content-loading.gif" />
 					<br/>
 </div>
+<!--end loading gif-->
 <div id="container">
 	<div id="wrapper">
 		<div id="insider-nav">
@@ -631,14 +627,8 @@ function tcmOmniTrack(oStr) {
 			  <img src='images/your-issues-header.png'  id='yourIssues' style='display:none' />
 			</div>
 		</div>
-
-
-
-
-
-
-
-		</div>
+	</div>
+  <!--end Web app code-->
 		<div id="footer">
 					<ul class="links">
 			<li class="first subscribe">Subscribe: <span class="with-border"><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017820.html" target="_blank">Print Magazine</a></span> <span class="with-border"><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017821.html" target="_blank">All Access</a></span> <span class="with-border"><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017822.html" target="_blank">Digital Plus</a></span> <span><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017823.html" target="_blank">V.I.P. Benefits</a></span></li>

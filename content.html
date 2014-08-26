@@ -78,21 +78,20 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 // ]]>
 	</script>
 	</div>
+<!--start web app-->
     <script type="text/javascript" src="http://cdn-contentviewer.adobe.com/public/pepper/wvel/2/WVEmbed.min.js"></script>
-	
- 
-    <script type="text/javascript">
+	<script type="text/javascript">
 
            var issue, url, library, gateway, searchIcon, searchField, issuePubDate, webRenditionStartDate = new Date(), mainContainer, issueDate, environment, accountID, authToken, tokenURL, loginURL, wvBridge, isLoggedIn, paywallURL, foundPaywall = false, deepLinkCookieName='TCM_PE_WebAppDeepLink', outerDiv, innerDiv, clearDiv, nav1Div, nav2Div,contentsDiv, blackDiv, shortcutsDiv,navigationAppended = false, autoZoomBrowser = false, autoZoomOn = false;
 		var months = {"01":["January"],"02":["February"],"03":["March"],"04":["April"],"05":["May"],"06":["June"],"07":["July"],"08":["August"],"09":["September"],"10":["October"],"11":["November"],"12":["December"]};
 		 var adTrackingParams=['fpa_adid', 'fpa_crid', 'fpa_ch', 'fpa_subch', 'fpa_dartPosition', 'fpa_dartType', 'fpa_siteName'];
 	     webRenditionStartDate=Date.UTC(2013,9,22,0,0,0,0);
 				
-	    // Enable autozoom for good browsers
+	    // Enable autozoom for good browsers *contributed by developer on team*
 		if(!(navigator.userAgent.match(/Chrome/i) && navigator.userAgent.match(/Mac OS X 10_6/i)) && !navigator.userAgent.match(/iPad/i) ){
 			autoZoomBrowser = true;
 		}
-
+        //if in test environment use qa URLs and qa account
 		if(/preview.people.com/.test(location.hostname)){
 			tokenURL  = "https://qa-auth.people.com/getTicket.php";
 			accountID = "24cf6a8ef4954cb3b002aa41e607adc7";
@@ -114,6 +113,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 			loginURL = gateway+tcmParamString+"&cdn-url=http%3A%2F%2Fpreview.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html"+encodeURIComponent(tcmParamString.replace(/^&/,"?"));
 
 		}
+		//else use production URLs and account
 		else{
 			accountID = "8632a117e7124ea988555c2dd41aa858";
         	tokenURL  = "https://auth.people.com/getTicket.php";
@@ -145,7 +145,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 		}
 	
        
-	    // Shim for IE9 to allow console.log
+	    // Shim for IE9 to allow console.log *contributed by developer on team*
         if (!window.console) {
             (function() {
                 var __console, Console;
@@ -187,11 +187,9 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 			            url: tokenURL,
 			            dataType: "jsonp",
 			            success: function(data, responseText){
-						   // console.log("Request to " + tokenURL + ": " + responseText);
-			                //if a result is returned	
+						    //if a result is returned	
 			                if (data.result) {
-				               // console.log("Status: " + data.status);
-								
+				             
 				                if (data.status == "200" ) {
 				                	//check if entitlement ticket already exists.  If it exists, use the current ticket, otherwise set the entitlement ticket to the LUCIE auth token	
 									var getEntitled=adobeDPS.authenticationService.getEntitlementTicket();
@@ -200,8 +198,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 									}else{
 										authToken=data['result'].ticket;
 									}
-									//console.log('Authtoken'+authToken);
-									
+								
 									adobeDPS.authenticationService.setEntitlementTicket(authToken);
 									//if valid article query string appended open content viewer						
 									if (decodeURI(getQueryString("articleUrl"))&&decodeURI(getQueryString("articleUrl"))!=='undefined') {
@@ -215,11 +212,9 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 
 										}
 										setURL();
-										//console.log(url);
 										popupView(url);	
 									}
 									else{
-										//console.log("bad querystring");
 										window.location.replace(loginURL); 
 									}
 									
@@ -233,8 +228,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 				               
 							}
 							else {
-							//console.log("Status: " + data.status + "; Error: " + data.error);
-							//if a result is not returned, user is not logged in
+						  //if a result is not returned, user is not logged in
 							if (data.status == "401" ) {
 									adobeDPS.authenticationService.setEntitlementTicket('');
 								    //if valid query string appended open content viewer, (which will hit paywall, either immediately, or after paging through some content, since not logged in)
@@ -346,11 +340,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
                     return true;
 			
                 } 
-				//open external URLs in the same window, replacing the content viewer
-				/*else if (message.eventType === "navigateToURL") {
-					window.open(message.url, '_self'); 
-				    return false; // This will not redirect the page
-                }*/
+				
 				//when the navigation event is returned change the URL hash to the article path, and set the paywallURL (which is set in the cookie if a paywall event is returned).
 				else if(message.eventType==="navigation"){
 					paywallURL=message.relativeArticlePath;
@@ -555,12 +545,12 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
 					
 					
 			};
-
+        //contributed by another developer
 		function toggleZoom(){
 			autoZoomOn = !autoZoomOn;
 			resizeContent(true);
 		}
-
+        //auto zoom code contributed by another developer
 		function resizeContent(revertZoom){
 			if(autoZoomBrowser){
 				var viewportHeight = $(window).height();
@@ -689,6 +679,7 @@ var s_code=s_time.t();if(s_code)document.write(s_code)
         <div class="clear"></div>
     </div>
 </div>
+<!--end web app code-->
 <script src="http://www.people.com/people/static/j/auth.js"></script>
 <!--[if IE 5]> Vignette StoryServer 6.0 Tue Aug 12 06:02:40 2014 <![endif]-->
   
