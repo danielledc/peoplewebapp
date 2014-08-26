@@ -63,4 +63,3 @@ Paywall event: This event is returned on the content page, if a user is not logg
  
 Navigation event: When the navigation event is returned, change the URL hash to the article path, especially to allow bookmarking and storage of the URL in a cookie
  
-NavigateToURL event: This event is returned when a mailto:// or external http:// or https:// link has been clicked in order to open these external links in a new window.
