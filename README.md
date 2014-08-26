@@ -13,7 +13,7 @@ DEMO
 
 3.  Enter credentials
  
-4.  Click Magazine or go here directly: http://www.people.com/people/static/digitalmagazine/index.hml
+4.  Click Magazine or go here directly: http://www.people.com/people/static/digitalmagazine/index.html
 
 About the Web App
 
