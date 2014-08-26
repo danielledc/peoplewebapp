@@ -45,9 +45,9 @@ A deep link is a URL that links to specific content in the web reader page. Deep
 
 http://www.people.com/people/static/digitalmagazine/index.html?/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/321209.html
 
-or the longer version:
+or
 
-http://www.people.com/people/static/digitalmagazine/content.html?articleUrl=/s/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/315015.html#s/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/321209.html
+http://www.people.com/people/static/digitalmagazine/content.html?articleUrl=/s/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/321209.html
 
 Deep Link Cookie
 
