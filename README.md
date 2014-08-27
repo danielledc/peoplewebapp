@@ -9,7 +9,7 @@ DEMO
 
 *To access the People Web App you must have People Magazine subscriber digital credentials*
 
-1.  Go to www.people.com
+1.  Go to http://www.people.com
 
 2.  Click Sign In in top right corner
 
@@ -32,7 +32,7 @@ Library page
 The library page is the page displaying all issues a user is entitled to read. A high level step by step description of the functionality is as follows:
 
 1. Check if an article query string is appended, meaning a subscriber is trying to access a deep link (see Deep Links below for more info). If there is one appended, STOP and redirect to content page with query string appended, otherwise go to step 2.
-2. Make an ajax call to php authentication file (https://auth.people.com/getTicket.php) which returns authentication token in JSON format. If there is no authentication token (meaning a status "401" or "503" is returned), STOP and redirect to subscription form, otherwise go to step 3
+2. Make an ajax call to php authentication file (https://auth.people.com/getTicket.php) which returns authentication token in JSON format. If there is no authentication token (meaning a status "401" or "503" is returned), subscriber is not logged in, so, STOP, and redirect to subscription form, otherwise go to step 3
 3. If there is an authentication token, use Adobe's API to check if there is already an entitlement token set (getEntitlementTicket()). If there is, use that token, otherwise set the token, using Adobe's API (setEntitlementTicket(authtoken)) to the one returned in step 2.
 4. Check if there is a deep link cookie (see Deep Links below for more info). This cookie is set if a user tries to access an article via a deep link but is not logged in first. If there is a cookie present, STOP and redirect to content page with query string appended, otherwise go to step 5
 5. Make an ajax call to php file (https://auth.people.com/ajaxEntitlements.php) which returns all entitlements, and other useful subscriber info, in JSON format.
@@ -61,7 +61,7 @@ The content page is the page that displays the magazine content within an iframe
 2. If there is an auth token, use Adobe's API to check if there is already an entitlement token set (getEntitlementTicket()). If there is, use that token, otherwise set the token, using Adobe's API (setEntitlementTicket(authtoken)) to the one returned in step 2.
 3. Build the outer frame around the content viewer, and call Adobe's create frame service (wvBridge), that loads the content viewer, and displays the content
 
-There are several important events returned from Adobe's API, handled as follows
+There are several important events returned from Adobe's API, handled as follows:
 
 Paywall event: This event is returned on the content page, if a user is not logged in, or is logged in but trying to access content not entitled to. If this event is returned, and a user is not logged in, store the URL in a cookie, and redirect to a subscription form. If the user is logged in, and this event is returned, the user is redirected to the library page.
  
