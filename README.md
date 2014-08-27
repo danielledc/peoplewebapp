@@ -29,7 +29,7 @@ A full description of the functionality of each page is below
 
 Library page
 
-The library page is the page displaying all issues a user is entitled to read. A high level step by step description of the functionality is as follows:
+The library page is the page displaying all issues a user is entitled to read, after first checking that an auth token (from the People Premium single service) exists and logging in to Adobe's authentication service using that token (thus not requiring the user to sign in again). A step by step description of the functionality is as follows:
 
 1. Check if an article query string is appended, meaning a subscriber is trying to access a deep link (see Deep Links below for more info). If there is one appended, STOP and redirect to content page with query string appended, otherwise go to step 2.
 2. Make an ajax call to php authentication file (https://auth.people.com/getTicket.php) which returns authentication token in JSON format. If there is no authentication token (meaning a status "401" or "503" is returned), subscriber is not logged in, so, STOP, and redirect to subscription form, otherwise go to step 3
@@ -55,7 +55,7 @@ If a user tries to access a deep link, and the user is not logged in, the URL is
 
 Content Page
 
-The content page is the page that displays the magazine content within an iframe, and must have a query string appended, representing the article URL. High level step by step description of the functionality is as follows:
+The content page is the page that displays the magazine content within an iframe, and must have a query string appended, representing the article URL. Similar to the library page, the page checks that an auth token (from the People Premium single service) exists and logs in to Adobe's authentication service using that token (thus not requiring the user to sign in again).  A step by step description of the functionality is as follows:
 
 1. Make an ajax call to php file (https://auth.people.com/getTicket.php) which returns auth token in JSON format. If there is no auth token (meaning a status "401" or "503" is returned), STOP and redirect to subscription form, otherwise go to step 2
 2. If there is an auth token, use Adobe's API to check if there is already an entitlement token set (getEntitlementTicket()). If there is, use that token, otherwise set the token, using Adobe's API (setEntitlementTicket(authtoken)) to the one returned in step 2.
