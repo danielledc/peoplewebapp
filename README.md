@@ -9,16 +9,7 @@ DEMO
 
 *To access the People Web App you must have People Magazine subscriber digital credentials*
 
-1.  Go to http://www.people.com
-
-2.  Click Sign In in top right corner
-
-3.  Enter credentials
-
-4.  Click OK
-
-5.  Click Magazine in the menu or go here directly: http://www.people.com/people/static/digitalmagazine/index.html
-
+The web app is located here: http://www.people.com/people/static/digitalmagazine/index.html
 
 RELEVANT FILES
 
