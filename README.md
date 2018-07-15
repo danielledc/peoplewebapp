@@ -9,7 +9,7 @@ My role on this project was as lead developer, developing the HTML, Javascript, 
 
 DEMO:
 
-Please view the images under the images folder to view how the people web app looked.
+People Web App image: http://daniellec.byethost12.com/portfolio/wp-content/uploads/2016/02/mc_pic12.png
 
 RELEVANT FILES
 
@@ -34,13 +34,7 @@ The library page is the page displaying all issues a user is entitled to read, a
 
 Deep Links
 
-A deep link is a URL that links to specific content in the web reader page. Deep links have the structure:
-
-http://www.people.com/people/static/digitalmagazine/index.html?/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/321209.html
-
-or
-
-http://www.people.com/people/static/digitalmagazine/content.html?articleUrl=/s/PEOPLE/8632a117e7124ea988555c2dd41aa858/com.timeinc.people.ipad.inapp.09012014/321209.html
+A deep link is a URL that links to specific content in the web reader page. 
 
 Deep Link Cookie
 
