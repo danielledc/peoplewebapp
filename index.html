@@ -90,545 +90,681 @@ function tcmOmniTrack(oStr) {
 
 	</script>
 </div>	
-   <!--start web app code-->
-	<script type="text/javascript" src="http://cdn-contentviewer.adobe.com/public/pepper/wvel/2/WVEmbed.min.js"></script>
-	
+<!--start web app code-->
+<script
+  type="text/javascript"
+  src="http://cdn-contentviewer.adobe.com/public/pepper/wvel/2/WVEmbed.min.js"
+></script>
 
-	<script type="text/javascript">  
-	     var entitledTitles, entitledTitlesArray=new Array(), uniqueEntitledTitlesArray=new Array(), authToken, xid, campaignLink, environment, productIdArray=new Array(), activeUser, library, searchIcon, searchField, mainContainer, accountID, mainLinks, footerLinks, paramArray, deepLinkCookieName='TCM_PE_WebAppDeepLink';
-	     
-	    browserObj = new Object();
-        var adTrackingParams=['fpa_adid', 'fpa_crid', 'fpa_ch', 'fpa_subch', 'fpa_dartPosition', 'fpa_dartType', 'fpa_siteName'];
-		
-		//function to get parameters in query string
-		function getTrackingParams(paramName){
-				var searchString = window.location.search.substring(1);
-				if(typeof searchString == "undefined" || searchString == ""){return false;}
-				var paramArray = searchString.split('&');
-				for(var i = 0; i < paramArray.length; i++){
-					var nvPair = paramArray[i].split('=');
-					if(nvPair[0] == paramName){
-						return nvPair[1];
-					}
-				}
-				return false;
-		}
-		//if in test environment use qa URLs and qa account, otherwise use production account
-		if(/preview\.people\.com/.test(location.hostname)){
-			accountID = "24cf6a8ef4954cb3b002aa41e607adc7";
-			environment='qa';
-			mainLinks = {
-				"gateway"     : "http://subscription-assets.people.com/qa/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS",
-				"signin"      : "http://subscription-assets.people.com/qa/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS&xid=PRMSubNavTab&link=1017846&cdn-url=http%3A%2F%2Fpreview.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html%3Fxid%3DPRMSubNavTab%26link%3D1017846",
-				"entitlement" : "https://qa-auth.people.com/ajaxEntitlements.php",
-				"token"		  : "https://qa-auth.people.com/getTicket.php",
-				"contentURL"  : "http://preview.people.com/people/static/digitalmagazine/content.html"
-			};
-			
-			xid=getTrackingParams('xid');
-			campaignLink=getTrackingParams('link');
-			var tcmParamString = (xid ? "&xid="+xid : "") + (campaignLink ? "&link="+campaignLink : "");
-			mainLinks.signin=mainLinks.gateway+tcmParamString+"&cdn-url=http%3A%2F%2Fwww.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html"+encodeURIComponent(tcmParamString.replace(/^&/,"?"));
+<script type="text/javascript">
+  var entitledTitles,
+    entitledTitlesArray = new Array(),
+    uniqueEntitledTitlesArray = new Array(),
+    authToken,
+    xid,
+    campaignLink,
+    environment,
+    productIdArray = new Array(),
+    activeUser,
+    library,
+    searchIcon,
+    searchField,
+    mainContainer,
+    accountID,
+    mainLinks,
+    footerLinks,
+    paramArray,
+    deepLinkCookieName = "TCM_PE_WebAppDeepLink";
 
-			for(i=0;i<adTrackingParams.length;i++){
-				if(getTrackingParams(adTrackingParams[i])){
-			        mainLinks.signin+="%26"+adTrackingParams[i]+"%3D"+encodeURIComponent(getTrackingParams(adTrackingParams[i]));
-				}		
-			}
-		}
-		else{
-			accountID = "8632a117e7124ea988555c2dd41aa858";
-			environment='prod';
-			mainLinks = {
-			    "gateway"     : "http://subscription-assets.people.com/prod/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS",
-				"signin"      : "http://subscription-assets.people.com/prod/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS&xid=PRMSubNavTab&link=1017846&cdn-url=http%3A%2F%2Fwww.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html%3Fxid%3DPRMSubNavTab%26link%3D1017846",
-				"entitlement" : "https://auth.people.com/ajaxEntitlements.php",
-				"token"		  : "https://auth.people.com/getTicket.php",
-				"contentURL"  : "http://www.people.com/people/static/digitalmagazine/content.html"
-			};
-			
-			xid = getTrackingParams('xid');
-			campaignLink = getTrackingParams('link');
-			var tcmParamString = (xid ? "&xid="+xid : "") + (campaignLink ? "&link="+campaignLink : "");
-			mainLinks.signin=mainLinks.gateway+tcmParamString+"&cdn-url=http%3A%2F%2Fwww.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html"+encodeURIComponent(tcmParamString.replace(/^&/,"?"));
-			
-			for(i=0;i<adTrackingParams.length;i++){
-			 if(getTrackingParams(adTrackingParams[i])){
-			        mainLinks.signin+="%26"+adTrackingParams[i]+"%3D"+encodeURIComponent(getTrackingParams(adTrackingParams[i]));
-			 }
-				
-			}
-			
-		}
-			        
-	    
-	    // Shim for IE9 to allow console.log *contributed by other developer*
-	    if (!window.console) {
-	    	(function() {
-		        var __console, Console;
-		    
-		        Console = function() {
-		            var check = setInterval(function() {
-		                var f, i;
-		                if (window.console && console.log && !console.__buffer) {
-		                    clearInterval(check);
-		                    f = (Function.prototype.bind) ? Function.prototype.bind.call(console.log, console) : console.log;
-		                    for (i = 0; i < __console.__buffer.length; i++) { f.apply(console, __console.__buffer[i]); }
-		                }
-		            }, 1000); 
-		    
-		            function log() {
-		                this.__buffer.push(arguments);
-		            }
-		    
-		            this.log = log;
-		            this.error = log;
-		            this.warn = log;
-		            this.info = log;
-		            this.__buffer = [];
-		        };
-		    
-		        __console = window.console = new Console();
-		    })();
-	    }
-		//end code contributed by other developer
-	    
-	    $(document).ready(function(){
-		
-         
-	       $(window).load(function() {
-				
-		   //if a deep link, redirect to content viewer page
-				if(getParams()){
-				    //if tablet or mobile device redirect
-					if(/iPad/.test(navigator.userAgent)||/NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)||/Android/.test(navigator.userAgent) ||/Silk/.test(navigator.userAgent)) {
-						$(".wrapLayer").hide();
-						if(/iPad/.test(navigator.userAgent)) {
-							window.location="https://itunes.apple.com/us/app/people-magazine/id384298160";
-							setTimeout(function(){window.location="http://www.people.com/people/insider"},1000);
-						} 
-						else if ( /NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)) {
-							window.location="http://www.barnesandnoble.com/w/people-time-inc/1109625686?ean=2940000983102";
-						}
-						else if ( /Android/.test(navigator.userAgent) ) {
-							window.location="https://play.google.com/store/magazines/details/People?id=CAow67qFAg";
-					   }
-						else if ( /Silk/.test(navigator.userAgent)) {
-							window.location="http://www.amazon.com/PEOPLE-Magazine-Kindle-Tablet-Edition/dp/B00636V5CM";  
-						}
-						
-					}
-					else{
-						deepLink();	
-					}
-				}
-				//otherwise make ajax call to LUCIE php file that returns auth token as JSON
-				else{
-				
-			  	if ($.support.ajax) { // Check if XHR is supported (cannot continue if it is not)
-	        		$.ajax({
-			            type: "GET",
-			            url: mainLinks.token,
-			            dataType: "jsonp",
-			            success: function(data, responseText){
-						    
-			                if (data.result) {
-				            	if (data.status == "401" || data.status == "503") {
-									
-				                	//if mobile or tablet don't redirect otherwise redirect to login page (subscription page)
-									if(/iPad/.test(navigator.userAgent)||/NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)||/Android/.test(navigator.userAgent) ||/Silk/.test(navigator.userAgent)) {
-									}
-									else{
-									    window.location.replace(mainLinks.signin);
-									}
-								}
-				                else{
-									 var $iframe = $('iframe#greeting-sign-in');
-         
-									if ( $iframe.length != 0 ) {
-										$( "#greeting-sign-in" ).contents().find( "#insider-sign-in-out" ).click( function() {
-										removeEntitlement();
-										return false;
-										});
+  browserObj = new Object();
+  var adTrackingParams = [
+    "fpa_adid",
+    "fpa_crid",
+    "fpa_ch",
+    "fpa_subch",
+    "fpa_dartPosition",
+    "fpa_dartType",
+    "fpa_siteName"
+  ];
 
-									}
-									
-									
-									//set the entitlement ticket to the LUCIE auth token	
-									authToken=data['result'].ticket;
-									adobeDPS.authenticationService.setEntitlementTicket(authToken);
-																	
-									//if deep link cookie exists, then redirect to content viewer page
-									if(getCookie(deepLinkCookieName)!=null){
-										deepLinkFromCookie(getCookie(deepLinkCookieName));
-									}
-									//otherwise get LUCIE entitlements
-									else{
-											getUserEntitlements();	
-									}	
-									
-								}
-							}
-							else {
-							    //Other error - if not tablet or mobile device redirect to login page
-			                	if(/iPad/.test(navigator.userAgent)||/NOOK/.test(navigator.userAgent)||/BNTV/.test(navigator.userAgent)||/Android/.test(navigator.userAgent) ||/Silk/.test(navigator.userAgent)) {
-								}
-								else{
-									window.location.replace(mainLinks.signin);
-									}
-								
-			                }
-			            },error: function(data, responseText){
-									console.log("Request: " + responseText);
-								}
-						});
-						
-				}	
-				else {
-		        	console.log("XHR is not supported in your browser. Are you using an old browser?")
-		        }
-				}
-	    	});
-	        
-			//this function loops through the XML data returned in the Adobe feed, and compares each entitlement array item to each product ID.  If they match, the product is displayed in the library
-	          var displayLibrary = function(data) {
-	        	console.log("displayLibrary");
-				var image, div, divRead, divDate, aImage, aRead, aTag, pubDate, pubDateDiv, issuesStartDate = new Date(), todayDate=new Date(), issuePubDate, rendition;
-				//filter out backissues starting with this date
-				issuesStartDate=Date.UTC(2012,07,20,0,0,0,0);
-				todayDate = Date.UTC(todayDate.getFullYear(), todayDate.getMonth(), todayDate.getDate(), todayDate.getHours(), todayDate.getMinutes(), todayDate.getSeconds(), todayDate.getMilliseconds());
-				
-				for(var index in data) {
-					
-					productIdArray[index]=data[index].productId;
-				 	for (j = 0; j < uniqueEntitledTitlesArray.length; j++) {
-					    rendition=data[index].isWebRendition;
-						if (data[index].productId == uniqueEntitledTitlesArray[j]) {
-					
-							  pubDate=JSON.stringify(data[index].publicationDate);
-							  pubDate=pubDate.match(/\d\d\d\d-\d\d-\d\d/).toString();
-							  
-							  pubDateDiv=pubDate.replace(/-/g,'');
-							  issuePubDate=new Date();
-															
-							  issuePubDate=Date.UTC(parseInt(pubDate.substring(0,4)),parseInt(pubDate.substring(5,7),10)-1,parseInt(pubDate.substring(8,10), 10),0,0,0,0);
-							 
-							   //Add exception for special "Hunger Games" issue - include using productId since date is out of range
-						       if((issuePubDate>=issuesStartDate&&todayDate>=issuePubDate)||data[index].productId=="com.timeinc.people.ipad.inapp.11012013"/*&&rendition==false)||(rendition==true&&todayDate>=issuePubDate)*/){
-						       	    //Force Hunger Games to display towards top of library but not as HERO (currently issues are sorted by DOM element 'id' : value is date)
-						       	    if (data[index].productId=="com.timeinc.people.ipad.inapp.11012013") { pubDateDiv = "20131029"}    
-									image = $("<img/>");
-									image
-										.attr({
-											"src"   : data[index].previewImageURL.portrait,
-											"alt"   : ""
-										})
-									aImage=$("<a>");
-			                        aImage
-										.addClass("hide")
-									$(aImage).append(image);
-									aRead=$("<a>");
-								    aRead
-										.addClass("hide");
-										
-									(function(thisIndex, thisLink, thisLinkRead) {
-																		
-											data[thisIndex].getArticleURL(function(url){
-											    if(/People/.test(url)){
-													url=url.replace("People","PEOPLE"); 
-												}
-												$(thisLink).attr('href',mainLinks.contentURL+"?articleUrl=" + encodeURI(url));
-												$(thisLinkRead).attr('href',mainLinks.contentURL+"?articleUrl=" + encodeURI(url));
-												$(thisLink).parent().css("background", "none");
-												$(thisLink).removeAttr("class");
-												$(thisLinkRead).removeAttr("class");
-												$(thisLinkRead).attr("class", "lib_btn");
-												$(thisLinkRead).css("display", "block");
-																	
-											});
-								
-									}(index, aImage, aRead));
-									div = $("<div id="+pubDateDiv+">");
-									divDate = $("<div>");
-									divDate.addClass("lib_box_txt").html(data[index].folioNumber);
-			                		$(div).append(divDate);
-									div.addClass("gridItem").append(aImage);
-																
-									
-								
-									$(div).append(aRead);
-									
-									$(mainContainer).append(div);
-								}
-							 }
-							}	
-				
-	            }
-				//hide loading gif once library built
-				$('#preloader').hide();
-				$('#container').show();
-				$("body").css("background", "#f7f7f7 url('http://img2.timeinc.net/people/static/i/nav/sprite-premium-top-nav-v3.png') 0 -440px repeat-x");
-								
-				$('div.gridItem').tsort({order:'desc', attr:'id'});
-				//if entitled to more than one issue 
-				if(entitledTitlesArray.length>1){
-				    //if current subscriber display current week's issue larger
-					if(activeUser!="N"){
-						$("div.gridItem:first" ).css( "height", "607px" );
-						$("div.gridItem:first" ).css( "width", "440px" );
-						$("div.gridItem:first img" ).css( "width", "388px" );
-						$("div.gridItem:first img" ).css( "height", "507px" );
-						$("div.gridItem:first a:last" ).css("background-position","0 -41px");
-						$("div.gridItem:first a:last" ).css("width","230px");
-						$("div.gridItem:first a:last" ).css("height","40px");
-						$("div.gridItem:first a:last" ).css("margin-left","120px");
-						$("div.gridItem:first div.lib_box_txt" ).css("padding-left","120px");
-					}
-					//if not current subscriber display subscribe banner
-					else{
-						$("#expiredUserAdCall" ).show();
-						tcmOmniTrack('pe-wappexpired');
-						$("#yourIssues" ).show();
-					}
-				}
-				//if entitled to one issue 
-				else {
-					//if current subscriber display issue centered and large
-					if(activeUser!="N"){
-						$("div.gridItem:first" ).css( "height", "607px" );
-						$("div.gridItem:first" ).css( "width", "440px" );
-						$("div.gridItem:first" ).css( "float", "none" );
-						$("div.gridItem:first" ).css( "margin", "0 auto" );
-						$("div.gridItem:first img" ).css( "width", "388px" );
-						$("div.gridItem:first img" ).css( "height", "507px" );
-						$("div.gridItem:first a:last" ).css("background-position","0 -41px");
-						$("div.gridItem:first a:last" ).css("width","230px");
-						$("div.gridItem:first a:last" ).css("height","40px");
-						$("div.gridItem:first a:last" ).css("margin-left","120px");
-						$("div.gridItem:first div.lib_box_txt" ).css("padding-left","120px");
-					}
-					//else show subscriber banner ad
-					else{
-					    $("#expiredUserAdCall" ).show();
-						tcmOmniTrack('pe-wappexpired');
-						$("#yourIssues" ).show();
-					}
+  //function to get parameters in query string
+  function getTrackingParams(paramName) {
+    var searchString = window.location.search.substring(1);
+    if (typeof searchString == "undefined" || searchString == "") {
+      return false;
+    }
+    var paramArray = searchString.split("&");
+    for (var i = 0; i < paramArray.length; i++) {
+      var nvPair = paramArray[i].split("=");
+      if (nvPair[0] == paramName) {
+        return nvPair[1];
+      }
+    }
+    return false;
+  }
+  //if in test environment use qa URLs and qa account, otherwise use production account
+  if (/preview\.people\.com/.test(location.hostname)) {
+    accountID = "24cf6a8ef4954cb3b002aa41e607adc7";
+    environment = "qa";
+    mainLinks = {
+      gateway:
+        "http://subscription-assets.people.com/qa/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS",
+      signin:
+        "http://subscription-assets.people.com/qa/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS&xid=PRMSubNavTab&link=1017846&cdn-url=http%3A%2F%2Fpreview.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html%3Fxid%3DPRMSubNavTab%26link%3D1017846",
+      entitlement: "https://qa-auth.people.com/ajaxEntitlements.php",
+      token: "https://qa-auth.people.com/getTicket.php",
+      contentURL:
+        "http://preview.people.com/people/static/digitalmagazine/content.html"
+    };
 
-				}
-							
-	        };
-	       
-			//get deep link parameters and determine if valid deep link
-	        var getParams=function(){
-			
-				var prmstr = window.location.search.substr(1);
-				paramArray = prmstr.split ("/");
-				
-				for ( var i = 0; i < paramArray.length; i++) {
-					if(paramArray[i]==''){
-						paramArray[i]='s';
-					}
+    xid = getTrackingParams("xid");
+    campaignLink = getTrackingParams("link");
+    var tcmParamString =
+      (xid ? "&xid=" + xid : "") +
+      (campaignLink ? "&link=" + campaignLink : "");
+    mainLinks.signin =
+      mainLinks.gateway +
+      tcmParamString +
+      "&cdn-url=http%3A%2F%2Fwww.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html" +
+      encodeURIComponent(tcmParamString.replace(/^&/, "?"));
 
-				
-				}
-				if(paramArray.length==5){ return true}
-				else return false;
-			
-			}
-			 var getQueryString = function(sVar) {
-	            var urlStr = window.location.search.substring(1),  sv;
-				
-				
-	                sv = urlStr.split("&");
-					for (i=0;i< sv.length;i++) {
-	                ft = sv [i].split("=");
-	                if (ft[0] == sVar) {
-	                    return ft[1];
-	                }
-	            }
-				
-	            
-	        };
-			//return value of deep link cookie
-			var getCookie = function(cookieName){
-				var cookieVal = document.cookie;
-				var cookieStart = cookieVal.indexOf(" " + cookieName + "=");
-				if (cookieStart == -1)
-				{
-					cookieStart = cookieVal.indexOf(cookieName + "=");
-				}
-				if (cookieStart == -1)
-				{
-					cookieVal = null;
-				}
-				else
-				{
-					cookieStart = cookieVal.indexOf("=", cookieStart) + 1;
-					var endOfCookie = cookieVal.indexOf(";", cookieStart);
-					if (endOfCookie == -1)
-					{
-						endOfCookie = cookieVal.length;
-					}
-					cookieVal = unescape(cookieVal.substring(cookieStart,endOfCookie));
-				}
-				return cookieVal;
-			};
+    for (i = 0; i < adTrackingParams.length; i++) {
+      if (getTrackingParams(adTrackingParams[i])) {
+        mainLinks.signin +=
+          "%26" +
+          adTrackingParams[i] +
+          "%3D" +
+          encodeURIComponent(getTrackingParams(adTrackingParams[i]));
+      }
+    }
+  } else {
+    accountID = "8632a117e7124ea988555c2dd41aa858";
+    environment = "prod";
+    mainLinks = {
+      gateway:
+        "http://subscription-assets.people.com/prod/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS",
+      signin:
+        "http://subscription-assets.people.com/prod/assets/themes/magazines/SUBS/templates/velocity/site/pe-gateway/lp.html?CGI-App-Id=com.timeinc.people.web&CGI-Site=pe-digitalmagazine&storeCode=SUBS&xid=PRMSubNavTab&link=1017846&cdn-url=http%3A%2F%2Fwww.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html%3Fxid%3DPRMSubNavTab%26link%3D1017846",
+      entitlement: "https://auth.people.com/ajaxEntitlements.php",
+      token: "https://auth.people.com/getTicket.php",
+      contentURL:
+        "http://www.people.com/people/static/digitalmagazine/content.html"
+    };
 
-		    //called when library page has deep link parameters appended
-	        var deepLink=function(){
-					var url= paramArray.join("/"); 
-					console.log(url);
-			        showContent(url);
-			}
-			//called when deep link cookie found
-			var deepLinkFromCookie=function(val){
-					console.log(val);
-					deleteCookie(deepLinkCookieName);
-			        showContent(val);
-			}
-			//delete the deep link cookie
-			var deleteCookie =function( name ) 
-				{
-					if ( getCookie( name ) )
-						document.cookie=deepLinkCookieName+"=;path=/;domain=.people.com;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
-			};
-			//open the content viewer page
-	        var showContent = function(articleUrl) {
-	        	//console.log("showContent");
-	       	    var screenH, screenW, url, newWindow;
-	       	    
-	       	    // Specifies the height and width of the screen,
-	       	    // in pixels, minus interface features such as
-	       	    // the taskbar in Windows.
-	       	   screenH = window.screen.availHeight;
-               screenW = window.screen.availWidth;
-			    
-	       	     url = "content.html?articleUrl=" + encodeURI(articleUrl);
-				
-	       	   console.log(url);
-	       	  
-	       	    // Open content in new window (fullscreen - width and height determined above)
-	       	     window.open(url, "_self");
-	       	    return false;                 
-	       	
-	   	    }
-			
-			    
-	   	    //initialize the Adobe library service
-	   	    var init = function() {
-	            console.log("init");
-	       
-	            // use [index] on jQuery selector to obtain the DOM element object rather than the jQuery object
-	            mainContainer = $("#mainContainerFrame")[0];
-	            
-	            library = adobeDPS.libraryService.createLibrary(accountID, 
-				{
-				"strAPIProtocolAndHost" : "http://edge.adobe-dcfs.com/",  
-				"strCDNProtocolAndHost" : "http://cdn-contentviewer.adobe.com/"
-				},
-				displayLibrary, function(error){console.error(error)});
-						
-	        };
-			//ajax call to LUCIE php file that returns entitlements in JSON format
-			var getUserEntitlements = function() {
-				  $.ajax({
-			            type: "GET",
-			            url: mainLinks.entitlement,
-			            dataType: "jsonp",
-			            success: function(data, responseText){
-								console.log("Request to " + mainLinks.entitlement + ": " + responseText);
-			                	
-								if (data.result) {
-								   //get entitlements
-									entitledTitles=data.result.entitlements.productId.toString();
-									entitledTitlesArray=entitledTitles.split(",");
-									$.each(entitledTitlesArray, function(i, el){
-										if($.inArray(el, uniqueEntitledTitlesArray) === -1) uniqueEntitledTitlesArray.push(el);
-									});	
-									activeUser=data.result.subscriber.subscriberIsActive;				                
-				                  // Entitlements Received, initialize
-									init();
-								} else {
-									if (data.status == "401" ||data.status == "500" ) {
-				                	//Lucie problem - refresh page for re-authentication request
-										getUserEntitlements();
-									}
-				                
-								}
-								},
-			            error: function(data, responseText){
-			            }
-			        });
-		      
-				};
-			});
+    xid = getTrackingParams("xid");
+    campaignLink = getTrackingParams("link");
+    var tcmParamString =
+      (xid ? "&xid=" + xid : "") +
+      (campaignLink ? "&link=" + campaignLink : "");
+    mainLinks.signin =
+      mainLinks.gateway +
+      tcmParamString +
+      "&cdn-url=http%3A%2F%2Fwww.people.com%2Fpeople%2Fstatic%2Fdigitalmagazine%2Findex.html" +
+      encodeURIComponent(tcmParamString.replace(/^&/, "?"));
 
-			function removeEntitlement(){
-				//logout of Adobe
-				
-				var authenticator = adobeDPS.authenticationService.createAuthenticator(accountID, 'timecustomerservice');
-				//on success, logout of LUCIE and redirect to login page
-			 	authenticator.logout(function success() {console.log('logout success');	}, function failure() {console.log('logout failure');});
-					
-					
-			};
-			
+    for (i = 0; i < adTrackingParams.length; i++) {
+      if (getTrackingParams(adTrackingParams[i])) {
+        mainLinks.signin +=
+          "%26" +
+          adTrackingParams[i] +
+          "%3D" +
+          encodeURIComponent(getTrackingParams(adTrackingParams[i]));
+      }
+    }
+  }
 
-			// To initially run the function:
-			
-	  </script>
+  // Shim for IE9 to allow console.log *contributed by other developer*
+  if (!window.console) {
+    (function() {
+      var __console, Console;
 
-  
+      Console = function() {
+        var check = setInterval(function() {
+          var f, i;
+          if (window.console && console.log && !console.__buffer) {
+            clearInterval(check);
+            f = Function.prototype.bind
+              ? Function.prototype.bind.call(console.log, console)
+              : console.log;
+            for (i = 0; i < __console.__buffer.length; i++) {
+              f.apply(console, __console.__buffer[i]);
+            }
+          }
+        }, 1000);
+
+        function log() {
+          this.__buffer.push(arguments);
+        }
+
+        this.log = log;
+        this.error = log;
+        this.warn = log;
+        this.info = log;
+        this.__buffer = [];
+      };
+
+      __console = window.console = new Console();
+    })();
+  }
+  //end code contributed by other developer
+
+  $(document).ready(function() {
+    $(window).load(function() {
+      //if a deep link, redirect to content viewer page
+      if (getParams()) {
+        //if tablet or mobile device redirect
+        if (
+          /iPad/.test(navigator.userAgent) ||
+          /NOOK/.test(navigator.userAgent) ||
+          /BNTV/.test(navigator.userAgent) ||
+          /Android/.test(navigator.userAgent) ||
+          /Silk/.test(navigator.userAgent)
+        ) {
+          $(".wrapLayer").hide();
+          if (/iPad/.test(navigator.userAgent)) {
+            window.location =
+              "https://itunes.apple.com/us/app/people-magazine/id384298160";
+            setTimeout(function() {
+              window.location = "http://www.people.com/people/insider";
+            }, 1000);
+          } else if (
+            /NOOK/.test(navigator.userAgent) ||
+            /BNTV/.test(navigator.userAgent)
+          ) {
+            window.location =
+              "http://www.barnesandnoble.com/w/people-time-inc/1109625686?ean=2940000983102";
+          } else if (/Android/.test(navigator.userAgent)) {
+            window.location =
+              "https://play.google.com/store/magazines/details/People?id=CAow67qFAg";
+          } else if (/Silk/.test(navigator.userAgent)) {
+            window.location =
+              "http://www.amazon.com/PEOPLE-Magazine-Kindle-Tablet-Edition/dp/B00636V5CM";
+          }
+        } else {
+          deepLink();
+        }
+      }
+      //otherwise make ajax call to LUCIE php file that returns auth token as JSON
+      else {
+        if ($.support.ajax) {
+          // Check if XHR is supported (cannot continue if it is not)
+          $.ajax({
+            type: "GET",
+            url: mainLinks.token,
+            dataType: "jsonp",
+            success: function(data, responseText) {
+              if (data.result) {
+                if (data.status == "401" || data.status == "503") {
+                  //if mobile or tablet don't redirect otherwise redirect to login page (subscription page)
+                  if (
+                    /iPad/.test(navigator.userAgent) ||
+                    /NOOK/.test(navigator.userAgent) ||
+                    /BNTV/.test(navigator.userAgent) ||
+                    /Android/.test(navigator.userAgent) ||
+                    /Silk/.test(navigator.userAgent)
+                  ) {
+                  } else {
+                    window.location.replace(mainLinks.signin);
+                  }
+                } else {
+                  var $iframe = $("iframe#greeting-sign-in");
+
+                  if ($iframe.length != 0) {
+                    $("#greeting-sign-in")
+                      .contents()
+                      .find("#insider-sign-in-out")
+                      .click(function() {
+                        removeEntitlement();
+                        return false;
+                      });
+                  }
+
+                  //set the entitlement ticket to the LUCIE auth token
+                  authToken = data["result"].ticket;
+                  adobeDPS.authenticationService.setEntitlementTicket(
+                    authToken
+                  );
+
+                  //if deep link cookie exists, then redirect to content viewer page
+                  if (getCookie(deepLinkCookieName) != null) {
+                    deepLinkFromCookie(getCookie(deepLinkCookieName));
+                  }
+                  //otherwise get LUCIE entitlements
+                  else {
+                    getUserEntitlements();
+                  }
+                }
+              } else {
+                //Other error - if not tablet or mobile device redirect to login page
+                if (
+                  /iPad/.test(navigator.userAgent) ||
+                  /NOOK/.test(navigator.userAgent) ||
+                  /BNTV/.test(navigator.userAgent) ||
+                  /Android/.test(navigator.userAgent) ||
+                  /Silk/.test(navigator.userAgent)
+                ) {
+                } else {
+                  window.location.replace(mainLinks.signin);
+                }
+              }
+            },
+            error: function(data, responseText) {
+              console.log("Request: " + responseText);
+            }
+          });
+        } else {
+          console.log(
+            "XHR is not supported in your browser. Are you using an old browser?"
+          );
+        }
+      }
+    });
+
+    //this function loops through the XML data returned in the Adobe feed, and compares each entitlement array item to each product ID.  If they match, the product is displayed in the library
+    var displayLibrary = function(data) {
+      console.log("displayLibrary");
+      var image,
+        div,
+        divRead,
+        divDate,
+        aImage,
+        aRead,
+        aTag,
+        pubDate,
+        pubDateDiv,
+        issuesStartDate = new Date(),
+        todayDate = new Date(),
+        issuePubDate,
+        rendition;
+      //filter out backissues starting with this date
+      issuesStartDate = Date.UTC(2012, 07, 20, 0, 0, 0, 0);
+      todayDate = Date.UTC(
+        todayDate.getFullYear(),
+        todayDate.getMonth(),
+        todayDate.getDate(),
+        todayDate.getHours(),
+        todayDate.getMinutes(),
+        todayDate.getSeconds(),
+        todayDate.getMilliseconds()
+      );
+
+      for (var index in data) {
+        productIdArray[index] = data[index].productId;
+        for (j = 0; j < uniqueEntitledTitlesArray.length; j++) {
+          rendition = data[index].isWebRendition;
+          if (data[index].productId == uniqueEntitledTitlesArray[j]) {
+            pubDate = JSON.stringify(data[index].publicationDate);
+            pubDate = pubDate.match(/\d\d\d\d-\d\d-\d\d/).toString();
+
+            pubDateDiv = pubDate.replace(/-/g, "");
+            issuePubDate = new Date();
+
+            issuePubDate = Date.UTC(
+              parseInt(pubDate.substring(0, 4)),
+              parseInt(pubDate.substring(5, 7), 10) - 1,
+              parseInt(pubDate.substring(8, 10), 10),
+              0,
+              0,
+              0,
+              0
+            );
+
+            //Add exception for special "Hunger Games" issue - include using productId since date is out of range
+            if (
+              (issuePubDate >= issuesStartDate && todayDate >= issuePubDate) ||
+              data[index].productId ==
+                "com.timeinc.people.ipad.inapp.11012013" /*&&rendition==false)||(rendition==true&&todayDate>=issuePubDate)*/
+            ) {
+              //Force Hunger Games to display towards top of library but not as HERO (currently issues are sorted by DOM element 'id' : value is date)
+              if (
+                data[index].productId ==
+                "com.timeinc.people.ipad.inapp.11012013"
+              ) {
+                pubDateDiv = "20131029";
+              }
+              image = $("<img/>");
+              image.attr({
+                src: data[index].previewImageURL.portrait,
+                alt: ""
+              });
+              aImage = $("<a>");
+              aImage.addClass("hide");
+              $(aImage).append(image);
+              aRead = $("<a>");
+              aRead.addClass("hide");
+
+              (function(thisIndex, thisLink, thisLinkRead) {
+                data[thisIndex].getArticleURL(function(url) {
+                  if (/People/.test(url)) {
+                    url = url.replace("People", "PEOPLE");
+                  }
+                  $(thisLink).attr(
+                    "href",
+                    mainLinks.contentURL + "?articleUrl=" + encodeURI(url)
+                  );
+                  $(thisLinkRead).attr(
+                    "href",
+                    mainLinks.contentURL + "?articleUrl=" + encodeURI(url)
+                  );
+                  $(thisLink)
+                    .parent()
+                    .css("background", "none");
+                  $(thisLink).removeAttr("class");
+                  $(thisLinkRead).removeAttr("class");
+                  $(thisLinkRead).attr("class", "lib_btn");
+                  $(thisLinkRead).css("display", "block");
+                });
+              })(index, aImage, aRead);
+              div = $("<div id=" + pubDateDiv + ">");
+              divDate = $("<div>");
+              divDate.addClass("lib_box_txt").html(data[index].folioNumber);
+              $(div).append(divDate);
+              div.addClass("gridItem").append(aImage);
+
+              $(div).append(aRead);
+
+              $(mainContainer).append(div);
+            }
+          }
+        }
+      }
+      //hide loading gif once library built
+      $("#preloader").hide();
+      $("#container").show();
+      $("body").css(
+        "background",
+        "#f7f7f7 url('http://img2.timeinc.net/people/static/i/nav/sprite-premium-top-nav-v3.png') 0 -440px repeat-x"
+      );
+
+      $("div.gridItem").tsort({ order: "desc", attr: "id" });
+      //if entitled to more than one issue
+      if (entitledTitlesArray.length > 1) {
+        //if current subscriber display current week's issue larger
+        if (activeUser != "N") {
+          $("div.gridItem:first").css("height", "607px");
+          $("div.gridItem:first").css("width", "440px");
+          $("div.gridItem:first img").css("width", "388px");
+          $("div.gridItem:first img").css("height", "507px");
+          $("div.gridItem:first a:last").css("background-position", "0 -41px");
+          $("div.gridItem:first a:last").css("width", "230px");
+          $("div.gridItem:first a:last").css("height", "40px");
+          $("div.gridItem:first a:last").css("margin-left", "120px");
+          $("div.gridItem:first div.lib_box_txt").css("padding-left", "120px");
+        }
+        //if not current subscriber display subscribe banner
+        else {
+          $("#expiredUserAdCall").show();
+          tcmOmniTrack("pe-wappexpired");
+          $("#yourIssues").show();
+        }
+      }
+      //if entitled to one issue
+      else {
+        //if current subscriber display issue centered and large
+        if (activeUser != "N") {
+          $("div.gridItem:first").css("height", "607px");
+          $("div.gridItem:first").css("width", "440px");
+          $("div.gridItem:first").css("float", "none");
+          $("div.gridItem:first").css("margin", "0 auto");
+          $("div.gridItem:first img").css("width", "388px");
+          $("div.gridItem:first img").css("height", "507px");
+          $("div.gridItem:first a:last").css("background-position", "0 -41px");
+          $("div.gridItem:first a:last").css("width", "230px");
+          $("div.gridItem:first a:last").css("height", "40px");
+          $("div.gridItem:first a:last").css("margin-left", "120px");
+          $("div.gridItem:first div.lib_box_txt").css("padding-left", "120px");
+        }
+        //else show subscriber banner ad
+        else {
+          $("#expiredUserAdCall").show();
+          tcmOmniTrack("pe-wappexpired");
+          $("#yourIssues").show();
+        }
+      }
+    };
+
+    //get deep link parameters and determine if valid deep link
+    var getParams = function() {
+      var prmstr = window.location.search.substr(1);
+      paramArray = prmstr.split("/");
+
+      for (var i = 0; i < paramArray.length; i++) {
+        if (paramArray[i] == "") {
+          paramArray[i] = "s";
+        }
+      }
+      if (paramArray.length == 5) {
+        return true;
+      } else return false;
+    };
+    var getQueryString = function(sVar) {
+      var urlStr = window.location.search.substring(1),
+        sv;
+
+      sv = urlStr.split("&");
+      for (i = 0; i < sv.length; i++) {
+        ft = sv[i].split("=");
+        if (ft[0] == sVar) {
+          return ft[1];
+        }
+      }
+    };
+    //return value of deep link cookie
+    var getCookie = function(cookieName) {
+      var cookieVal = document.cookie;
+      var cookieStart = cookieVal.indexOf(" " + cookieName + "=");
+      if (cookieStart == -1) {
+        cookieStart = cookieVal.indexOf(cookieName + "=");
+      }
+      if (cookieStart == -1) {
+        cookieVal = null;
+      } else {
+        cookieStart = cookieVal.indexOf("=", cookieStart) + 1;
+        var endOfCookie = cookieVal.indexOf(";", cookieStart);
+        if (endOfCookie == -1) {
+          endOfCookie = cookieVal.length;
+        }
+        cookieVal = unescape(cookieVal.substring(cookieStart, endOfCookie));
+      }
+      return cookieVal;
+    };
+
+    //called when library page has deep link parameters appended
+    var deepLink = function() {
+      var url = paramArray.join("/");
+      console.log(url);
+      showContent(url);
+    };
+    //called when deep link cookie found
+    var deepLinkFromCookie = function(val) {
+      console.log(val);
+      deleteCookie(deepLinkCookieName);
+      showContent(val);
+    };
+    //delete the deep link cookie
+    var deleteCookie = function(name) {
+      if (getCookie(name))
+        document.cookie =
+          deepLinkCookieName +
+          "=;path=/;domain=.people.com;expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+    };
+    //open the content viewer page
+    var showContent = function(articleUrl) {
+      //console.log("showContent");
+      var screenH, screenW, url, newWindow;
+
+      // Specifies the height and width of the screen,
+      // in pixels, minus interface features such as
+      // the taskbar in Windows.
+      screenH = window.screen.availHeight;
+      screenW = window.screen.availWidth;
+
+      url = "content.html?articleUrl=" + encodeURI(articleUrl);
+
+      console.log(url);
+
+      // Open content in new window (fullscreen - width and height determined above)
+      window.open(url, "_self");
+      return false;
+    };
+
+    //initialize the Adobe library service
+    var init = function() {
+      console.log("init");
+
+      // use [index] on jQuery selector to obtain the DOM element object rather than the jQuery object
+      mainContainer = $("#mainContainerFrame")[0];
+
+      library = adobeDPS.libraryService.createLibrary(
+        accountID,
+        {
+          strAPIProtocolAndHost: "http://edge.adobe-dcfs.com/",
+          strCDNProtocolAndHost: "http://cdn-contentviewer.adobe.com/"
+        },
+        displayLibrary,
+        function(error) {
+          console.error(error);
+        }
+      );
+    };
+    //ajax call to LUCIE php file that returns entitlements in JSON format
+    var getUserEntitlements = function() {
+      $.ajax({
+        type: "GET",
+        url: mainLinks.entitlement,
+        dataType: "jsonp",
+        success: function(data, responseText) {
+          console.log(
+            "Request to " + mainLinks.entitlement + ": " + responseText
+          );
+
+          if (data.result) {
+            //get entitlements
+            entitledTitles = data.result.entitlements.productId.toString();
+            entitledTitlesArray = entitledTitles.split(",");
+            $.each(entitledTitlesArray, function(i, el) {
+              if ($.inArray(el, uniqueEntitledTitlesArray) === -1)
+                uniqueEntitledTitlesArray.push(el);
+            });
+            activeUser = data.result.subscriber.subscriberIsActive;
+            // Entitlements Received, initialize
+            init();
+          } else {
+            if (data.status == "401" || data.status == "500") {
+              //Lucie problem - refresh page for re-authentication request
+              getUserEntitlements();
+            }
+          }
+        },
+        error: function(data, responseText) {}
+      });
+    };
+  });
+
+  function removeEntitlement() {
+    //logout of Adobe
+
+    var authenticator = adobeDPS.authenticationService.createAuthenticator(
+      accountID,
+      "timecustomerservice"
+    );
+    //on success, logout of LUCIE and redirect to login page
+    authenticator.logout(
+      function success() {
+        console.log("logout success");
+      },
+      function failure() {
+        console.log("logout failure");
+      }
+    );
+  }
+
+  // To initially run the function:
+</script>
+
 <div>
-<!--loading gif displays on load of page-->
- <div id='preloader' style='text-align:center'>
-					<br/>
-					<img src="images/content-loading.gif" />
-					<br/>
-</div>
-<!--end loading gif-->
-<div id="container">
-	<div id="wrapper">
-		<div id="insider-nav">
-    <div class="main">
-        <div class="left">
-            <a href="/people/" class="site active" id="people-com"><span>People.com</span></a>
-            <a href="/people/insider/" class="site" id="people-premium"><span>People Premium</span></a>
+  <!--loading gif displays on load of page-->
+  <div id="preloader" style="text-align:center">
+    <br />
+    <img src="images/content-loading.gif" />
+    <br />
+  </div>
+  <!--end loading gif-->
+  <div id="container">
+    <div id="wrapper">
+      <div id="insider-nav">
+        <div class="main">
+          <div class="left">
+            <a href="/people/" class="site active" id="people-com"
+              ><span>People.com</span></a
+            >
+            <a href="/people/insider/" class="site" id="people-premium"
+              ><span>People Premium</span></a
+            >
             <div class="clear"></div>
+          </div>
+          <div class="right">
+            <iframe
+              id="greeting-sign-in"
+              src=""
+              frameborder="0"
+              scrolling="no"
+              width="500"
+              height="40"
+            ></iframe>
+          </div>
+          <div class="clear"></div>
         </div>
-        <div class="right">
-            <iframe id="greeting-sign-in" src="" frameborder="0" scrolling="no" width="500" height="40"></iframe>
+        <div class="sub">
+          <a href="/people/insider/" id="insider-sub-premium"
+            ><span>Premium Home</span></a
+          >
+          <a
+            href="http://www.people.com/people/static/digitalmagazine/index.html?xid=PRMSubNavTab&link=1017846"
+            id="insider-sub-magazine"
+            target="_blank"
+            ><span>Magazine</span></a
+          >
+          <a href="/people/celebfood/" id="insider-sub-celebfood"
+            ><span>CelebFood</span></a
+          >
+          <div class="clear"></div>
         </div>
-        <div class="clear"></div>
-    </div>
-    <div class="sub">
-        <a href="/people/insider/" id="insider-sub-premium"><span>Premium Home</span></a>
-        <a href="http://www.people.com/people/static/digitalmagazine/index.html?xid=PRMSubNavTab&link=1017846" id="insider-sub-magazine" target="_blank"><span>Magazine</span></a>
-        <a href="/people/celebfood/" id="insider-sub-celebfood"><span>CelebFood</span></a>
-        <div class="clear"></div>
-    </div>
-</div>
-<script src="http://www.people.com/people/static/j/auth.js"></script>
-<!--[if IE 5]> Vignette StoryServer 6.0 Tue Aug 12 06:02:40 2014 <![endif]-->
-  
-<div id="banner-nav" class="premium-nav">
-    <a class="banner-img" href="/people/insider"><strong>Exclusively for our digital subscribers</strong></a>
-</div>
+      </div>
+      <script src="http://www.people.com/people/static/j/auth.js"></script>
+      <!--[if IE 5]>
+        Vignette StoryServer 6.0 Tue Aug 12 06:02:40 2014
+      <![endif]-->
 
-		<div id="main" style='background-image: none;padding-top:0px;'>
-<!-- MAIN CONTENT HERE -->
-      <div id="mainContainer" class="grid"  >
-			<div id="mainContainerFrame" class="lib_frame" >
-			   
-			     <img src='images/the-magazine-header.png' />
-				<div id='expiredUserAdCall' style='display:none'>
-				<script type="text/javascript">adFactory.getCmAd(936, 140, "magazine", "tout").write();</script>
-				 
-			  <img src='images/your-issues-header.png'  id='yourIssues' style='display:none' />
-			</div>
-		</div>
-	</div>
-  <!--end Web app code-->
+      <div id="banner-nav" class="premium-nav">
+        <a class="banner-img" href="/people/insider"
+          ><strong>Exclusively for our digital subscribers</strong></a
+        >
+      </div>
+
+      <div id="main" style="background-image: none;padding-top:0px;">
+        <!-- MAIN CONTENT HERE -->
+        <div id="mainContainer" class="grid">
+          <div id="mainContainerFrame" class="lib_frame">
+            <img src="images/the-magazine-header.png" />
+            <div id="expiredUserAdCall" style="display:none">
+              <script type="text/javascript">
+                adFactory.getCmAd(936, 140, "magazine", "tout").write();
+              </script>
+
+              <img
+                src="images/your-issues-header.png"
+                id="yourIssues"
+                style="display:none"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>	
+<!--end Web app code-->
 		<div id="footer">
 					<ul class="links">
 			<li class="first subscribe">Subscribe: <span class="with-border"><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017820.html" target="_blank">Print Magazine</a></span> <span class="with-border"><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017821.html" target="_blank">All Access</a></span> <span class="with-border"><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017822.html" target="_blank">Digital Plus</a></span> <span><a href="https://subscription.people.com/storefront/subscribe-to-people/link/1017823.html" target="_blank">V.I.P. Benefits</a></span></li>
